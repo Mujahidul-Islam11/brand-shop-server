@@ -23,6 +23,7 @@ async function run() {
   try {
     await client.connect();
     const AddSlider = client.db("EntoMedu").collection("AddSlider");
+    const AddProduct = client.db("EntoMedu").collection("AddProduct");
 
     app.get("/brand", async (req, res) => {
         const cursor = AddSlider.find({});
@@ -34,6 +35,16 @@ async function run() {
             const query = {brandName : brandName}
             const brandData = await AddSlider.findOne(query)
             res.send(brandData)
+        })
+        app.get("/products",async(req,res)=>{
+            const cursor = AddProduct.find({})
+            const add = await cursor.toArray();
+            res.send(add)
+        })
+        app.post("/products",async(req, res)=>{
+            const products = req.body;
+            const result = await AddProduct.insertOne(products)
+            res.send(result)
         })
 
     await client.db("admin").command({ ping: 1 });
