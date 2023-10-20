@@ -24,6 +24,8 @@ async function run() {
     await client.connect();
     const AddSlider = client.db("EntoMedu").collection("AddSlider");
     const AddProduct = client.db("EntoMedu").collection("AddProduct");
+    const cartCollection = client.db("EntoMedu").collection("cart");
+
 
     app.get("/brand", async (req, res) => {
         const cursor = AddSlider.find({});
@@ -41,6 +43,33 @@ async function run() {
             const add = await cursor.toArray();
             res.send(add)
         })
+        app.get('/products/:id', async (req, res) => {
+          const id = req.params.id
+          const query = { _id: new ObjectId(id) }
+          const result = await AddProduct.findOne(query)
+          res.send(result)
+        })
+
+        app.post('/myCart', async(req, res)=>{
+          const cart = req.body;
+          console.log(cart)
+          const result =await cartCollection.insertOne(cart)
+          res.send(result)
+         })
+
+         app.delete("/myCart/:id", async (req, res) => {
+          const id = req.params.id
+          const query ={_id : id}
+          const result = await cartCollection.deleteOne(query);
+          res.send(result)
+        });
+        
+         app.get('/myCart', async(req, res)=> {
+          const cursor = cartCollection.find()
+          const result = await cursor.toArray()
+          res.send(result)
+        })
+
         app.post("/products",async(req, res)=>{
             const products = req.body;
             const result = await AddProduct.insertOne(products)
