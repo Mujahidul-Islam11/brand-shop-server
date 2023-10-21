@@ -49,6 +49,25 @@ async function run() {
           const result = await AddProduct.findOne(query)
           res.send(result)
         })
+        app.put('/products/:id', async (req, res) => {
+          const id = req.params.id
+          const filter = {_id: new ObjectId(id) }
+          const update =req.body
+          const cart = {
+            $set: {
+              name:update.name,
+              brandName:update.brandName,
+              rating:update.rating,
+              price:update.price,
+              description:update.description,
+              type:update.type,
+              photo:update.photo
+            }
+          }
+          const result = await AddProduct.updateOne(filter, cart);
+          res.send(result);
+        })
+        
 
         app.post('/myCart', async(req, res)=>{
           const cart = req.body;
@@ -56,6 +75,7 @@ async function run() {
           const result =await cartCollection.insertOne(cart)
           res.send(result)
          })
+
 
          app.delete("/myCart/:id", async (req, res) => {
           const id = req.params.id
