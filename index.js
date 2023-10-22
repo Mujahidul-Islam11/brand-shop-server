@@ -21,7 +21,7 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    await client.connect();
+    // await client.connect();
     const AddSlider = client.db("EntoMedu").collection("AddSlider");
     const AddProduct = client.db("EntoMedu").collection("AddProduct");
     const cartCollection = client.db("EntoMedu").collection("cart");
@@ -96,10 +96,10 @@ async function run() {
             res.send(result)
         })
 
-    await client.db("admin").command({ ping: 1 });
-    console.log(
-      "Pinged your deployment. You successfully connected to MongoDB!"
-    );
+    // await client.db("admin").command({ ping: 1 });
+    // console.log(
+    //   "Pinged your deployment. You successfully connected to MongoDB!"
+    // );
   } finally {
     // Ensures that the client will close when you finish/error
     // await client.close();
